@@ -28,12 +28,14 @@ class twitterData:
         return(np.mean(select['score']))
     
     def aggregate_score(self, interval_days=30):
-        drange = pd.date_range(self.data['date'][0], periods=interval_days, freq='D')
+        drange = pd.date_range(self.data['date'][0], periods=interval_days,
+                               freq='D')
         s = pd.Series(np.float64(self.data.score), index=self.data.date)
-        return(s.resample('M', np.mean))
+        return(s.resample('W', np.mean))
 
 
 if __name__ == "__main__":
     a = twitterData('../../twitter_client/twitter_client/data/output_got.csv')
     print(a.final_socre())
-    print(a.aggregate_score())
+    m = a.aggregate_score()
+    print(m)
