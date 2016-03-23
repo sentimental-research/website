@@ -1,11 +1,23 @@
-<!doctype html>
-<title>Hello from Flask</title>
+<title>The community sentiment of {{ project }}</title>
   <h1>{{ project }}!</h1>
 
   <div>plot</div>
 
   <div>badge</div>
+  <img src="https://img.shields.io/badge/{{ badge }}">
+  <div> "https://img.shields.io/badge/{{ badge }}"</div>
 
   <div> tweets </div>
-
+  <ul class=tweets>
+  {% for tweet in tweets %}
+  <div>
+    <li>{{tweet.text}}
+    <div>
+    {{tweet.date}}
+    </div>
+  </div>
+  {% else %}
+  <li><em>Your community is not tweating</em>
+  {% endfor %}
+  </ul>
 
