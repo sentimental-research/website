@@ -11,16 +11,16 @@ class twitterData:
 
 
     def get_csv(self, file):
+        header = ['name', 'date', 'tweet', 'id', 'score']
         with open(file, 'r') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=';')
+            spamreader = csv.reader(csvfile, delimiter=',')
             for row in spamreader:
-                if len(row) is 4:
+                if len(row) is len(header):
                     self.data.append(row)
-        header = self.data[0]
-        self.data = self.data[1:]
+#        self.data = self.data[1:]
         self.data = pd.DataFrame(self.data, columns=header)
         self.data.date=self.data.date.apply(
-            lambda x: dt.datetime.strptime(x, '%Y-%m-%d %H:%M'))
+            lambda x: dt.datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
 
     def final_socre(self, last_n_days=180):
         date_range = list(self.data['date'])[-1] - dt.timedelta(days=last_n_days)
