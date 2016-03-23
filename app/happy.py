@@ -1,5 +1,9 @@
+import subprocess
+
 from flask import Flask, request, render_template, url_for, redirect
 import pandas as pd
+
+from TwitterClient import TwitterClient
 
 app = Flask(__name__)
 
@@ -11,8 +15,20 @@ def index():
                                 project=request.form['project']))
     return render_template('index.html')
 
+
+def query_twitter(project):
+    pass
+    # client = TwitterClient()
+    # results = client.get_tweets(project)
+    # client.write_results(results)
+
+def calculate_sentiment():
+    subprocess.call(['java', '-version']) #'-jar', 'sentiment...jar','input', 'output'])
+
 @app.route('/package/<project>/')
 def show_project_profile(project):
+    query_twitter(project)
+    calculate_sentiment()
     # calculate the output (with a wheel..?)
     # show the user profile for that user
     color = ['green', 'orange', 'red']
@@ -24,11 +40,8 @@ def show_project_profile(project):
                          'text' : ['this is my  tweet',
                                    'I hate this'] })
 
-
-    tweetslist = [{'date':'Jun 2012', 'text':'this is my twet'},
-                  {'date':'July 2010', 'text': 'I hate this'}]
     tweetlist = df2.to_dict(orient='records')
-    print(tweetlist)
+
     return render_template('project.html',
                            project=project,
                            badge='community-{status}-{color}.svg'.format(**session),
