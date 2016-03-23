@@ -30,7 +30,7 @@ def query_twitter(project):
     # client.write_results(results)
 
 def calculate_sentiment():
-    subprocess.call(['java', '-version']) #'-jar', 'sentiment...jar','input', 'output'])
+    subprocess.call(['java', '-jar', 'sentiment-analyser-0.0.1-SNAPSHOT.jar','tweets.csv', 'output'])
 
 def generate_plot(inputfile):
     td = twitterData.twitterData(inputfile)
