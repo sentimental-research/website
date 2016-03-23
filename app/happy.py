@@ -54,8 +54,8 @@ def generate_plot(inputfile):
 @app.route('/package/<project>/')
 def show_project_profile(project):
     query_twitter(project)
-    calculate_sentiment()
-    tweets = generate_plot('output_got.csv')
+    #calculate_sentiment()
+    tweets = generate_plot('output.csv')
     # calculate the output (with a wheel..?)
     # show the user profile for that user
     color = ['green', 'orange', 'red']
@@ -67,8 +67,9 @@ def show_project_profile(project):
     #                      'text' : ['this is my  tweet',
     #                                'I hate this'] })
 
+    tweets.data['text'] = [x.decode('utf-8') for x in tweets.data['tweet'].values]
     tweetlist = tweets.data.to_dict(orient='records')
-
+    
     return render_template('project.html',
                            project=project,
                            badge='community-{status}-{color}.svg'.format(**session),
