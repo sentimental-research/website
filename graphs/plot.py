@@ -8,7 +8,7 @@ td = twitterData.twitterData("../../twitter_client/twitter_client/data/output_go
 
 #output_file("callback.html")
 
-TOOLS="resize,pan,wheel_zoom,box_zoom,reset,previewsave"
+#TOOLS="resize,pan,wheel_zoom,box_zoom,reset,previewsave"
 
 
 import pandas as pd
@@ -22,7 +22,7 @@ output_file("timeseries.html")
 
 data = dict(AAPL=AAPL['Adj Close'], Date=AAPL['Date'])
 
-p = TimeSeries(data, title="APPL", ylabel='Stock Prices')
+p = TimeSeries(data, index='Date',  title="APPL", ylabel='Stock Prices')
 
 show(p)
 
