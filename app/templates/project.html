@@ -1,15 +1,15 @@
 <title>The community sentiment of {{ project }}</title>
   <h1>{{ project }}!</h1>
 
-  <div>plot</div>
-
-  <div>badge</div>
+  <h2>temporal variation</h2>
+  <iframe height=700 width=800 src='/static/community_satisfaction.html'></iframe> 
+  <h2>badge</h2>
   <img src="https://img.shields.io/badge/{{ badge }}">
   <br>
   Add this badge to your website adding this to your README.md
   <div> [![Community](https://img.shields.io/badge/{{ badge }})]</div>
 
-  <div> tweets </div>
+  <h2> tweets </h2>
   <ul class=tweets>
   {% for tweet in tweets %}
   <div>

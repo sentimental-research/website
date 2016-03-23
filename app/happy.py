@@ -1,9 +1,16 @@
+import os
 import subprocess
+from random import random
 
 from flask import Flask, request, render_template, url_for, redirect
 import pandas as pd
+from bokeh.charts import TimeSeries, Line
+from bokeh.models import CustomJS, ColumnDataSource
+from bokeh.plotting import figure, output_file, show
+from bokeh.io import output_file, show, vplot
 
 from TwitterClient import TwitterClient
+from twitter_graph import twitterData
 
 app = Flask(__name__)
 
@@ -25,22 +32,42 @@ def query_twitter(project):
 def calculate_sentiment():
     subprocess.call(['java', '-version']) #'-jar', 'sentiment...jar','input', 'output'])
 
+def generate_plot(inputfile):
+    td = twitterData.twitterData(inputfile)
+    monthly_data = td.aggregate_score()
+    final_score = td.final_socre()
+
+    def plot_timeseries(data):
+        TOOLS="resize,pan,wheel_zoom,box_zoom,reset,previewsave"
+        p = TimeSeries(data, title="satisfaction (weekly)", xlabel="Time")
+        return(p)
+
+    def plot_histogram(data):
+        return(0)
+
+    output_file(os.path.join('static', "community_satisfaction.html"))
+    s1 = plot_timeseries(monthly_data)
+    #show(s1)
+    return td
+
+
 @app.route('/package/<project>/')
 def show_project_profile(project):
     query_twitter(project)
     calculate_sentiment()
+    tweets = generate_plot('output_got.csv')
     # calculate the output (with a wheel..?)
     # show the user profile for that user
     color = ['green', 'orange', 'red']
     status = [':)', ':|', ':(', '%E2%98%A0']
-    session = {'color': color[2],
-               'status': status[3]}
+    session = {'color': color[0],
+               'status': status[0]}
 
-    df2 = pd.DataFrame({ 'date' : pd.Timestamp('20130102'),
-                         'text' : ['this is my  tweet',
-                                   'I hate this'] })
+    # df2 = pd.DataFrame({ 'date' : pd.Timestamp('20130102'),
+    #                      'text' : ['this is my  tweet',
+    #                                'I hate this'] })
 
-    tweetlist = df2.to_dict(orient='records')
+    tweetlist = tweets.data.to_dict(orient='records')
 
     return render_template('project.html',
                            project=project,
