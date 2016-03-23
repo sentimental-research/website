@@ -7,7 +7,7 @@ class twitterData:
     def __init__(self, file):
         self.data = []
         self.get_csv(file)
-        self.data['score'] = np.random.randn(len(self.data)) # mocking
+        #self.data['score'] = np.random.randn(len(self.data)) # mocking
 
 
     def get_csv(self, file):
@@ -22,20 +22,24 @@ class twitterData:
         self.data.date=self.data.date.apply(
             lambda x: dt.datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
 
+#        print(list(self.data.score))
+        self.data.score = np.float64(self.data.score)
+        print(self.data)
+
     def final_socre(self, last_n_days=180):
         date_range = list(self.data['date'])[-1] - dt.timedelta(days=last_n_days)
         select = self.data[self.data['date'] > date_range]
         return(np.mean(select['score']))
     
     def aggregate_score(self, interval_days=30):
-        drange = pd.date_range(self.data['date'][0], periods=interval_days,
-                               freq='D')
+        #drange = pd.date_range(self.data['date'][0], periods=interval_days, freq='D')
+        print(self.data)
         s = pd.Series(np.float64(self.data.score), index=self.data.date)
         return(s.resample('W', np.mean))
 
 
-if __name__ == "__main__":
-    a = twitterData('../../twitter_client/twitter_client/data/output_got.csv')
-    print(a.final_socre())
-    m = a.aggregate_score()
-    print(m)
+#if __name__ == "__main__":
+#    a = twitterData('../../twitter_client/twitter_client/data/output_got.csv')
+#    print(a.final_socre())
+#    m = a.aggregate_score()
+#    print(m)
